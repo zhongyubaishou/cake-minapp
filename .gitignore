@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+Thumbs.db
+uploads/
+certs/
+unpackage/
+.hbuilderx/
+
+# 忽略所有 .md 文件，仅保留 README.md
+*.md
+!README.md

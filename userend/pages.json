@@ -1,0 +1,110 @@
+{
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "蛋糕定制"
+			}
+		},
+		{
+			"path": "pages/product/list",
+			"style": {
+				"navigationBarTitleText": "商品列表",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/product/detail",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+		},
+		{
+			"path": "pages/order/customize",
+			"style": {
+				"navigationBarTitleText": "定制下单"
+			}
+		},
+		{
+			"path": "pages/order/confirm",
+			"style": {
+				"navigationBarTitleText": "订单确认"
+			}
+		},
+		{
+			"path": "pages/order/list",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/case/list",
+			"style": {
+				"navigationBarTitleText": "蛋糕案例",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/case/detail",
+			"style": {
+				"navigationBarTitleText": "案例详情"
+			}
+		},
+		{
+			"path": "pages/mine/index",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/mine/favorite",
+			"style": {
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/mine/after-sale",
+			"style": {
+				"navigationBarTitleText": "售后反馈"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "蛋糕定制",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#F6F1ED",
+		"backgroundColorTop": "#FFFFFF",
+		"backgroundColorBottom": "#F6F1ED"
+	},
+	"tabBar": {
+		"color": "#8A7D76",
+		"selectedColor": "#D95C33",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "black",
+		"list": [
+			{
+				"pagePath": "pages/home/index",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/case/list",
+				"text": "蛋糕案例"
+			},
+			{
+				"pagePath": "pages/mine/index",
+				"text": "我的"
+			}
+		]
+	},
+	"uniIdRouter": {}
+}

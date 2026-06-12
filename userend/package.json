@@ -1,0 +1,14 @@
+{
+  "name": "userend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "蛋糕定制微信小程序用户端 uni-app 工程",
+  "scripts": {
+	"dev:mp-weixin": "pushd E:\\work\\birth && D:\\HBuilderX\\cli.exe launch mp-weixin --project userend && popd",
+	"build:mp-weixin": "pushd E:\\work\\birth && D:\\HBuilderX\\cli.exe launch mp-weixin --project userend --compile true && popd",
+	"dev:web": "pushd E:\\work\\birth && D:\\HBuilderX\\cli.exe launch web --project userend --browser Built && popd",
+	"build:web": "pushd E:\\work\\birth && D:\\HBuilderX\\cli.exe launch web --project userend --compile true --browser Built && popd",
+	"log:mp-weixin": "pushd E:\\work\\birth && D:\\HBuilderX\\cli.exe logcat mp-weixin --project userend --mode prevBuild && popd",
+	"log:web": "pushd E:\\work\\birth && D:\\HBuilderX\\cli.exe logcat web --project userend --mode prevBuild --browser Built && popd"
+  }
+}

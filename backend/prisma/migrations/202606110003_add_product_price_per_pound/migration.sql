@@ -1,0 +1,1 @@
+ALTER TABLE `product` ADD COLUMN `price_per_pound` DECIMAL(10, 2) NOT NULL DEFAULT 0.00;

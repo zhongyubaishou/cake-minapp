@@ -1,0 +1,450 @@
+// Cake MiniApp — Prisma Schema
+// MySQL 8.0
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ===================== 基础模型 =====================
+
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique @db.VarChar(64)
+  passwordHash String    @map("password_hash") @db.VarChar(256)
+  name         String    @db.VarChar(64)
+  roleId       Int?      @map("role_id")
+  status       Int       @default(1) @db.TinyInt
+  lastLoginAt  DateTime? @map("last_login_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  role AdminRole? @relation(fields: [roleId], references: [id])
+
+  @@index([roleId])
+  @@map("admin_user")
+}
+
+model AdminRole {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique @db.VarChar(64)
+  name        String   @db.VarChar(64)
+  permissions Json
+  status      Int      @default(1) @db.TinyInt
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  admins AdminUser[]
+
+  @@map("admin_role")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  openId      String    @unique @map("open_id") @db.VarChar(64)
+  unionId     String?   @map("union_id") @db.VarChar(64)
+  nickname    String?   @db.VarChar(64)
+  avatarUrl   String?   @map("avatar_url") @db.VarChar(512)
+  phone       String?   @db.VarChar(20)
+  lastLoginAt DateTime  @map("last_login_at")
+  status      Int       @default(1) @db.TinyInt
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  orders         Order[]
+  favorites      UserFavorite[]
+  refundRecords  RefundRecord[]
+  afterSales     AfterSale[]
+
+  @@map("user")
+}
+
+model StoreConfig {
+  id                 Int       @id @default(autoincrement())
+  name               String    @db.VarChar(128)
+  address            String    @db.VarChar(256)
+  lng                Decimal   @db.Decimal(10, 7)
+  lat                Decimal   @db.Decimal(10, 7)
+  businessHoursStart String    @default("06:00:00") @map("business_hours_start") @db.VarChar(8)
+  businessHoursEnd   String    @default("18:00:00") @map("business_hours_end") @db.VarChar(8)
+  deliveryRangeKm    Decimal   @default(5.0) @map("delivery_range_km") @db.Decimal(4, 1)
+  deliveryFeePerKm   Decimal   @default(2.0) @map("delivery_fee_per_km") @db.Decimal(5, 1)
+  minAdvanceHours    Int       @default(6) @map("min_advance_hours") @db.TinyInt
+  dailyOrderLimit    Int?      @map("daily_order_limit")
+  pricePerPound      Decimal   @default(0.00) @map("price_per_pound") @db.Decimal(10, 2)
+  qrCodeUrl          String?   @map("qr_code_url") @db.VarChar(512)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@map("store_config")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(64)
+  sortOrder Int      @default(0) @map("sort_order")
+  isEnabled Int      @default(1) @map("is_enabled") @db.TinyInt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  products Product[]
+
+  orders   Order[]
+
+  @@map("category")
+}
+
+model Product {
+  id              Int      @id @default(autoincrement())
+  categoryId      Int      @map("category_id")
+  name            String   @db.VarChar(128)
+  imageUrl        String?  @map("image_url") @db.VarChar(512)
+  description     String?  @db.Text
+  basePrice       Decimal  @map("base_price") @db.Decimal(10, 2)
+  pricePerPound   Decimal  @default(0.00) @map("price_per_pound") @db.Decimal(10, 2)
+  availablePounds Json     @map("available_pounds")
+  defaultPound    Decimal  @default(2.0) @map("default_pound") @db.Decimal(3, 1)
+  availableFlavors Json    @map("available_flavors")
+  defaultFlavor   String   @default("原味") @map("default_flavor") @db.VarChar(32)
+  availableThemes Json     @map("available_themes")
+  defaultTheme    String   @default("成人") @map("default_theme") @db.VarChar(32)
+  isOnSale        Int      @default(1) @map("is_on_sale") @db.TinyInt
+  sortOrder       Int      @default(0) @map("sort_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  category Category @relation(fields: [categoryId], references: [id])
+  orders   Order[]
+
+  @@index([categoryId])
+  @@map("product")
+}
+
+model CakeCase {
+  id             Int      @id @default(autoincrement())
+  imageUrl       String?  @map("image_url") @db.VarChar(512)
+  name           String   @db.VarChar(128)
+  theme          String?  @db.VarChar(32)
+  referencePound Decimal? @map("reference_pound") @db.Decimal(3, 1)
+  referencePrice Decimal? @map("reference_price") @db.Decimal(10, 2)
+  isShown        Int      @default(1) @map("is_shown") @db.TinyInt
+  sortOrder      Int      @default(0) @map("sort_order")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  favorites UserFavorite[]
+  orders    Order[]
+
+  @@map("cake_case")
+}
+
+model UserFavorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  caseId    Int      @map("case_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user     User     @relation(fields: [userId], references: [id])
+  cakeCase CakeCase @relation(fields: [caseId], references: [id])
+
+  @@unique([userId, caseId])
+  @@map("user_favorite")
+}
+
+// ===================== 订单核心 =====================
+
+model Order {
+  id                   Int       @id @default(autoincrement())
+  orderNo              String    @unique @map("order_no") @db.VarChar(32)
+  userId               Int       @map("user_id")
+  userNickname         String?   @map("user_nickname") @db.VarChar(64)
+  userPhone            String?   @map("user_phone") @db.VarChar(20)
+  source               SourceType
+  productId            Int?      @map("product_id")
+  caseId               Int?      @map("case_id")
+  categoryId           Int       @map("category_id")
+  categoryName         String    @map("category_name") @db.VarChar(64)
+  productName          String    @map("product_name") @db.VarChar(128)
+  productImageUrl      String?   @map("product_image_url") @db.VarChar(512)
+  status               OrderStatus
+  pickupType           PickupType @map("pickup_type")
+  appointmentTime      DateTime  @map("appointment_time")
+  isOutsideHours       Int       @default(0) @map("is_outside_hours") @db.TinyInt
+  productAmount        Decimal?  @map("product_amount") @db.Decimal(10, 2)
+  deliveryFee          Decimal   @default(0.00) @map("delivery_fee") @db.Decimal(10, 2)
+  totalAmount          Decimal?  @map("total_amount") @db.Decimal(10, 2)
+  payStatus            PayStatus @default(UNPAID) @map("pay_status")
+  isStartedMaking      Int       @default(0) @map("is_started_making") @db.TinyInt
+  cancelReason         String?   @map("cancel_reason") @db.VarChar(256)
+  bossRemark           String?   @map("boss_remark") @db.Text
+  userRemark           String?   @map("user_remark") @db.Text
+  orderedAt            DateTime  @default(now()) @map("ordered_at")
+  acceptedAt           DateTime? @map("accepted_at")
+  paidAt               DateTime? @map("paid_at")
+  startMakingAt        DateTime? @map("start_making_at")
+  finishedProductionAt DateTime? @map("finished_production_at")
+  startedDeliveryAt    DateTime? @map("started_delivery_at")
+  completedAt          DateTime? @map("completed_at")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  user          User               @relation(fields: [userId], references: [id])
+  product       Product?           @relation(fields: [productId], references: [id])
+  cakeCase      CakeCase?          @relation(fields: [caseId], references: [id])
+  category      Category           @relation(fields: [categoryId], references: [id])
+  customization OrderCustomization?
+  deliveryInfo  DeliveryInfo?
+  paymentRecords PaymentRecord[]
+  refundRecords  RefundRecord[]
+  afterSales     AfterSale[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([appointmentTime])
+  @@index([orderedAt])
+  @@map("orders")
+}
+
+model OrderCustomization {
+  id               Int      @id @default(autoincrement())
+  orderId          Int      @unique @map("order_id")
+  buyPound         Decimal  @map("buy_pound") @db.Decimal(3, 1)
+  actualMakePound  Decimal  @map("actual_make_pound") @db.Decimal(3, 1)
+  flavor           String   @db.VarChar(32)
+  theme            String   @db.VarChar(32)
+  blessingText     String?  @map("blessing_text") @db.VarChar(200)
+  plateCount       Int      @default(0) @map("plate_count")
+  candleCount      Int      @default(0) @map("candle_count")
+  referenceImages  Json?    @map("reference_images")
+  specialRemark    String?  @map("special_remark") @db.Text
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("order_customization")
+}
+
+model DeliveryInfo {
+  id              Int             @id @default(autoincrement())
+  orderId         Int             @unique @map("order_id")
+  receiverName    String?         @map("receiver_name") @db.VarChar(64)
+  receiverPhone   String?         @map("receiver_phone") @db.VarChar(20)
+  address         String          @db.VarChar(256)
+  addressLng      Decimal         @map("address_lng") @db.Decimal(10, 7)
+  addressLat      Decimal         @map("address_lat") @db.Decimal(10, 7)
+  distanceKm      Decimal         @map("distance_km") @db.Decimal(6, 3)
+  systemFee       Decimal         @map("system_fee") @db.Decimal(10, 2)
+  finalFee        Decimal         @map("final_fee") @db.Decimal(10, 2)
+  deliveryStatus  DeliveryStatus  @default(WAIT) @map("delivery_status")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("delivery_info")
+}
+
+// ===================== 支付 & 退款 =====================
+
+model PaymentRecord {
+  id              Int             @id @default(autoincrement())
+  orderId         Int             @map("order_id")
+  transactionId   String?         @map("transaction_id") @db.VarChar(64)
+  outTradeNo      String          @unique @map("out_trade_no") @db.VarChar(64)
+  amount          Decimal         @db.Decimal(10, 2)
+  payStatus       PayRecordStatus @map("pay_status")
+  payMethod       String          @default("WECHAT_PAY") @map("pay_method") @db.VarChar(32)
+  paidAt          DateTime?       @map("paid_at")
+  rawNotifyData   Json?           @map("raw_notify_data")
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("payment_record")
+}
+
+model RefundRecord {
+  id                Int            @id @default(autoincrement())
+  refundNo          String         @unique @map("refund_no") @db.VarChar(32)
+  orderId           Int            @map("order_id")
+  userId            Int            @map("user_id")
+  amount            Decimal        @db.Decimal(10, 2)
+  reason            String         @db.Text
+  refundStatus      RefundStatus   @map("refund_status")
+  outRefundNo       String?        @unique @map("out_refund_no") @db.VarChar(64)
+  wechatRefundId    String?        @map("wechat_refund_id") @db.VarChar(64)
+  refundChannel     String?        @map("refund_channel") @db.VarChar(32)
+  failedReason      String?        @map("failed_reason") @db.VarChar(256)
+  refundNotifyData  Json?          @map("refund_notify_data")
+  bossRemark        String?        @map("boss_remark") @db.Text
+  appliedAt         DateTime       @default(now()) @map("applied_at")
+  reviewedAt        DateTime?      @map("reviewed_at")
+  completedAt       DateTime?      @map("completed_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("refund_record")
+}
+
+// ===================== 售后 =====================
+
+model AfterSale {
+  id            Int            @id @default(autoincrement())
+  afterSaleNo   String         @unique @map("after_sale_no") @db.VarChar(32)
+  orderId       Int            @map("order_id")
+  userId        Int            @map("user_id")
+  userPhone     String?        @map("user_phone") @db.VarChar(20)
+  description   String         @db.Text
+  images        Json?
+  status        AfterSaleStatus @default(PENDING)
+  bossRemark    String?        @map("boss_remark") @db.Text
+  submittedAt   DateTime       @default(now()) @map("submitted_at")
+  processedAt   DateTime?      @map("processed_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("after_sale")
+}
+
+// ===================== 文件 & 日志 =====================
+
+model UploadFile {
+  id           Int          @id @default(autoincrement())
+  fileUrl      String       @map("file_url") @db.VarChar(512)
+  fileKey      String       @map("file_key") @db.VarChar(512)
+  fileType     String       @map("file_type") @db.VarChar(32)
+  bizType      BizType      @map("biz_type")
+  bizId        Int?         @map("biz_id")
+  uploaderType UploaderType @map("uploader_type")
+  uploaderId   Int?         @map("uploader_id")
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  @@map("upload_file")
+}
+
+model ReminderSetting {
+  id                 Int      @id @default(autoincrement())
+  orderConfirmNotice Int      @default(1) @map("order_confirm_notice") @db.TinyInt
+  paidNotice         Int      @default(0) @map("paid_notice") @db.TinyInt
+  productionNotice   Int      @default(1) @map("production_notice") @db.TinyInt
+  pickupNotice       Int      @default(1) @map("pickup_notice") @db.TinyInt
+  deliveryNotice     Int      @default(1) @map("delivery_notice") @db.TinyInt
+  completeNotice     Int      @default(1) @map("complete_notice") @db.TinyInt
+  refundNotice       Int      @default(0) @map("refund_notice") @db.TinyInt
+  newOrderSound      Int      @default(1) @map("new_order_sound") @db.TinyInt
+  paidSound          Int      @default(0) @map("paid_sound") @db.TinyInt
+  refundSound        Int      @default(0) @map("refund_sound") @db.TinyInt
+  afterSaleSound     Int      @default(1) @map("after_sale_sound") @db.TinyInt
+  appointmentSound   Int      @default(1) @map("appointment_sound") @db.TinyInt
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("reminder_setting")
+}
+
+model OperationLog {
+  id           Int          @id @default(autoincrement())
+  targetType   TargetType   @map("target_type")
+  targetId     Int          @map("target_id")
+  operatorType OperatorType @map("operator_type")
+  operatorId   Int?         @map("operator_id")
+  action       String       @db.VarChar(64)
+  fromStatus   String?      @map("from_status") @db.VarChar(32)
+  toStatus     String?      @map("to_status") @db.VarChar(32)
+  remark       String?      @db.Text
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  @@index([targetType, targetId])
+  @@index([createdAt])
+  @@map("operation_log")
+}
+
+// ===================== ENUMS =====================
+
+enum SourceType {
+  PRODUCT
+  CUSTOM
+  CASE
+}
+
+enum OrderStatus {
+  WAIT_ACCEPT
+  WAIT_PAY
+  PAID_WAIT_MAKE
+  MAKING
+  WAIT_PICKUP
+  WAIT_DELIVERY
+  DELIVERING
+  COMPLETED
+  CANCELED
+  REFUNDING
+  REFUNDED
+}
+
+enum PickupType {
+  SELF_PICKUP
+  DELIVERY
+}
+
+enum PayStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+enum PayRecordStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum DeliveryStatus {
+  WAIT
+  DELIVERING
+  DELIVERED
+}
+
+enum RefundStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REFUND_PROCESSING
+  REFUNDED
+  REFUND_FAILED
+}
+
+enum AfterSaleStatus {
+  PENDING
+  COMPLETED
+}
+
+enum BizType {
+  PRODUCT
+  CASE
+  ORDER_REF
+  AFTER_SALE
+  AVATAR
+}
+
+enum UploaderType {
+  ADMIN
+  USER
+}
+
+enum TargetType {
+  ORDER
+  PRODUCT
+  CATEGORY
+  CASE
+  REFUND
+  AFTER_SALE
+}
+
+enum OperatorType {
+  USER
+  ADMIN
+  SYSTEM
+}

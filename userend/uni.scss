@@ -1,0 +1,75 @@
+/**
+ * uni-app built-in style variables
+ * 蛋糕定制小程序 — Mondrian + Memphis + Swiss 三位艺术家风格融合
+ */
+
+/* Behavior colors */
+$uni-color-primary: #d95c33;
+$uni-color-success: #35a66a;
+$uni-color-warning: #e8a13a;
+$uni-color-error: #d94b4b;
+
+/* ── 新增点缀色（Mondrian + Memphis）── */
+$cake-accent-blue: #2d5fbf;
+$cake-accent-yellow: #e8b830;
+$cake-accent-black: #1a1512;
+$cake-surface-white: #ffffff;
+$cake-divider: rgba(26, 21, 18, 0.10);
+
+/* 孟菲斯几何色块（低透明度背景用） */
+$cake-geo-blue: rgba(45, 95, 191, 0.08);
+$cake-geo-yellow: rgba(232, 184, 48, 0.10);
+$cake-geo-red: rgba(217, 92, 51, 0.06);
+
+/* Text colors */
+$uni-text-color: #2d2521;
+$uni-text-color-inverse: #fff;
+$uni-text-color-grey: #8a7d76;
+$uni-text-color-placeholder: #b9aaa1;
+$uni-text-color-disable: #c8beb8;
+
+/* Background colors */
+$uni-bg-color: #ffffff;
+$uni-bg-color-grey: #f6f1ed;
+$uni-bg-color-hover: #f1e7df;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.4);
+
+/* Border colors */
+$uni-border-color: #eadfd8;
+
+/* Sizes */
+$uni-font-size-sm: 12px;
+$uni-font-size-base: 14px;
+$uni-font-size-lg: 16px;
+
+/* Image sizes */
+$uni-img-size-sm: 20px;
+$uni-img-size-base: 26px;
+$uni-img-size-lg: 40px;
+
+/* Border radius */
+$uni-border-radius-sm: 4px;
+$uni-border-radius-base: 8px;
+$uni-border-radius-lg: 12px;
+$uni-border-radius-circle: 50%;
+
+/* Spacing horizontal — Müller-Brockmann 等比阶梯 (8→16→32) */
+$uni-spacing-row-sm: 8px;
+$uni-spacing-row-base: 16px;
+$uni-spacing-row-lg: 32px;
+
+/* Spacing vertical — 同步等比阶梯 */
+$uni-spacing-col-sm: 8px;
+$uni-spacing-col-base: 16px;
+$uni-spacing-col-lg: 32px;
+
+/* Opacity */
+$uni-opacity-disabled: 0.3;
+
+/* Article */
+$uni-color-title: #2d2521;
+$uni-font-size-title: 20px;
+$uni-color-subtitle: #6d5f58;
+$uni-font-size-subtitle: 26px;
+$uni-color-paragraph: #4d443f;
+$uni-font-size-paragraph: 15px;

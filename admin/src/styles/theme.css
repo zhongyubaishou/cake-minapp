@@ -1,0 +1,434 @@
+/* ============================================================
+   Birth Cake Admin — 视觉系统 v2
+   灵感来源: Ettore Sottsass (孟菲斯) · Paula Scher (字体排版) · Dieter Rams (功能主义)
+   ============================================================ */
+
+:root {
+  /* 主色调 — 孟菲斯珊瑚红 */
+  --cake-primary: #E84855;
+  --cake-primary-dark: #C0392B;
+  --cake-primary-soft: #FDE8EC;
+  --cake-primary-glow: rgba(232, 72, 85, 0.24);
+
+  /* 辅助色 — 孟菲斯调色板 */
+  --cake-teal: #1ABC9C;
+  --cake-teal-soft: #E0F7F3;
+  --cake-amber: #F5A623;
+  --cake-amber-soft: #FEF5E7;
+  --cake-purple: #8E44AD;
+  --cake-purple-soft: #F3EAF8;
+
+  /* 功能色 */
+  --cake-danger: #E74C3C;
+  --cake-danger-soft: #FDEDEC;
+  --cake-warning: #F39C12;
+  --cake-warning-soft: #FEF9E7;
+  --cake-success: #27AE60;
+  --cake-success-soft: #E8F8F0;
+  --cake-info: #2D9CDB;
+  --cake-info-soft: #EAF4FB;
+
+  /* 排版色 — Paula Scher 高对比度 */
+  --cake-text: #1A1A2E;
+  --cake-text-soft: #3D3D56;
+  --cake-muted: #7F8C8D;
+  --cake-placeholder: #B0B8C1;
+
+  /* 表面色 — Dieter Rams 克制的基底 */
+  --cake-bg: #F1F2F6;
+  --cake-surface: #FFFFFF;
+  --cake-border: #DEE2E6;
+  --cake-border-light: #E9ECEF;
+  --cake-divider: #F0F1F3;
+
+  /* 侧边栏 */
+  --cake-sidebar: #14142B;
+  --cake-sidebar-hover: rgba(255, 255, 255, 0.06);
+  --cake-sidebar-active: var(--cake-primary);
+
+  /* 字体族 — Paula Scher 标题 + Dieter Rams 正文 */
+  --font-display: "Playfair Display", "Times New Roman", serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  /* 圆角系统 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  /* 阴影系统 */
+  --shadow-xs: 0 1px 2px rgba(20, 20, 43, 0.04);
+  --shadow-sm: 0 2px 6px rgba(20, 20, 43, 0.06);
+  --shadow-md: 0 4px 12px rgba(20, 20, 43, 0.08);
+  --shadow-lg: 0 8px 24px rgba(20, 20, 43, 0.12);
+  --shadow-xl: 0 16px 48px rgba(20, 20, 43, 0.16);
+
+  /* 过渡 */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Element Plus 覆盖 */
+  --el-color-primary: var(--cake-primary);
+  --el-color-primary-light-3: #F27A84;
+  --el-color-primary-light-5: #F8B0B6;
+  --el-color-primary-light-7: #FCD8DC;
+  --el-color-primary-light-9: #FDECEE;
+  --el-color-success: var(--cake-success);
+  --el-color-warning: var(--cake-warning);
+  --el-color-danger: var(--cake-danger);
+  --el-color-info: var(--cake-info);
+  --el-border-radius-base: var(--radius-md);
+  --el-border-color-light: var(--cake-border);
+  --el-text-color-primary: var(--cake-text);
+  --el-text-color-regular: var(--cake-text-soft);
+  --el-text-color-placeholder: var(--cake-placeholder);
+  --el-bg-color: var(--cake-surface);
+  --el-fill-color-blank: var(--cake-surface);
+}
+
+/* ============================================================
+   全局重置
+   ============================================================ */
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  color: var(--cake-text);
+  background: var(--cake-bg);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   排版层级 — Paula Scher 理念
+   ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--cake-text);
+}
+
+/* ============================================================
+   Element Plus 卡片
+   ============================================================ */
+
+.el-card {
+  border: 1px solid var(--cake-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.el-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.el-card.is-always-shadow {
+  box-shadow: var(--shadow-md);
+}
+
+.el-card__body {
+  padding: 20px;
+}
+
+/* ============================================================
+   Element Plus 按钮 — 孟菲斯几何风格
+   ============================================================ */
+
+.el-button {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-family: var(--font-body);
+  letter-spacing: 0.01em;
+  transition: all var(--transition-fast);
+}
+
+.el-button--primary {
+  --el-button-bg-color: var(--cake-primary);
+  --el-button-border-color: var(--cake-primary);
+  --el-button-hover-bg-color: var(--cake-primary-dark);
+  --el-button-hover-border-color: var(--cake-primary-dark);
+  --el-button-active-bg-color: var(--cake-primary-dark);
+}
+
+.el-button--danger {
+  --el-button-bg-color: var(--cake-danger);
+  --el-button-border-color: var(--cake-danger);
+}
+
+/* ============================================================
+   Element Plus 表单控件
+   ============================================================ */
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 1px var(--cake-border) inset;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.el-input__wrapper:hover,
+.el-select__wrapper:hover,
+.el-textarea__inner:hover {
+  box-shadow: 0 0 0 1px var(--cake-muted) inset;
+}
+
+.el-input.is-focus .el-input__wrapper,
+.el-select.is-focus .el-select__wrapper {
+  box-shadow: 0 0 0 1px var(--cake-primary) inset, 0 0 0 3px var(--cake-primary-glow);
+}
+
+/* ============================================================
+   Element Plus 表格 — 功能主义清晰
+   ============================================================ */
+
+.el-table {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  color: var(--cake-text);
+  font-family: var(--font-body);
+  border: 1px solid var(--cake-border);
+}
+
+.el-table th.el-table__cell {
+  background: #F8F9FA !important;
+  color: var(--cake-text-soft);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.el-table td.el-table__cell,
+.el-table th.el-table__cell.is-leaf {
+  border-bottom-color: var(--cake-divider);
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background: #FAFBFC;
+}
+
+/* ============================================================
+   Element Plus 标签 — 状态可视化（核心）
+   ============================================================ */
+
+.el-tag {
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 2px 12px;
+  height: auto;
+  min-height: 22px;
+  line-height: 1.6;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.el-tag--default {
+  background: var(--cake-divider);
+  color: var(--cake-text-soft);
+}
+
+.el-tag--primary {
+  background: var(--cake-primary-soft);
+  color: var(--cake-primary);
+}
+
+.el-tag--success {
+  background: var(--cake-success-soft);
+  color: var(--cake-success);
+}
+
+.el-tag--warning {
+  background: var(--cake-warning-soft);
+  color: #B8730A;
+}
+
+.el-tag--danger {
+  background: var(--cake-danger-soft);
+  color: var(--cake-danger);
+}
+
+.el-tag--info {
+  background: var(--cake-info-soft);
+  color: var(--cake-info);
+}
+
+.el-tag--dark {
+  color: #fff;
+}
+
+.el-tag--dark.el-tag--primary { background: var(--cake-primary); }
+.el-tag--dark.el-tag--success { background: var(--cake-success); }
+.el-tag--dark.el-tag--warning { background: var(--cake-warning); }
+.el-tag--dark.el-tag--danger { background: var(--cake-danger); }
+.el-tag--dark.el-tag--info { background: var(--cake-info); }
+
+/* ============================================================
+   Element Plus 对话框
+   ============================================================ */
+
+.el-dialog {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+.el-dialog__header {
+  padding: 20px 24px 0;
+  font-family: var(--font-display);
+}
+
+.el-dialog__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--cake-text);
+}
+
+.el-dialog__body {
+  padding: 20px 24px;
+}
+
+.el-dialog__footer {
+  padding: 0 24px 20px;
+}
+
+/* ============================================================
+   Element Plus 分页
+   ============================================================ */
+
+.el-pagination {
+  font-family: var(--font-body);
+}
+
+.el-pager li.is-active {
+  background: var(--cake-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   Element Plus 菜单
+   ============================================================ */
+
+.el-menu {
+  font-family: var(--font-body);
+}
+
+/* ============================================================
+   Element Plus 时间选择器
+   ============================================================ */
+
+.el-picker-panel {
+  border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   Element Plus 消息框
+   ============================================================ */
+
+.el-message {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-body);
+}
+
+.el-message-box {
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+}
+
+/* ============================================================
+   Element Plus 描述列表
+   ============================================================ */
+
+.el-descriptions {
+  font-family: var(--font-body);
+}
+
+.el-descriptions__label {
+  font-weight: 600;
+  color: var(--cake-text-soft);
+}
+
+/* ============================================================
+   公共组件样式
+   ============================================================ */
+
+.page-card {
+  padding: 24px;
+  border: 1px solid var(--cake-border);
+  border-radius: var(--radius-md);
+  background: var(--cake-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.page-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--cake-text);
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cake-muted);
+}
+
+/* ============================================================
+   滚动条美化
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cake-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cake-muted);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ============================================================
+   选中文本
+   ============================================================ */
+
+::selection {
+  background: var(--cake-primary-soft);
+  color: var(--cake-primary-dark);
+}
